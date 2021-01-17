@@ -1,25 +1,61 @@
-import logo from './logo.svg';
 import './App.css';
+import { Component } from 'react';
+import cross from "./cross.png";
 
-function App() {
+/*To-do app challenge:
+Add todo’s
+Remove todo’s
+Tick off/Complete todo’s
+*/
+
+class App extends Component {
+
+  state = {
+    listItems: [],
+    newItem: ""
+  }
+
+  buttonHandler = (val) => {
+    
+    this.setState({listItems: [...this.state.listItems, this.state.newItem]})
+    
+  }
+  
+  addToListHandler = (val) => {
+  this.setState({newItem: val.target.value})
+  }
+
+  removeItemhandler = (index) => {
+    let itemArray = this.state.listItems
+    itemArray.splice(index, 1);
+    this.setState({listItems: itemArray});
+    console.log(this.state.listItems);
+  }
+
+render() {
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <h1 id="titleText">To Do List</h1>
+      <TaskList value={this.state.newItem} inputHandler={this.addToListHandler} buttonHandler={this.buttonHandler} />
+      <br />
+      <div className="listItems">{this.state.listItems.map((item, index) => (
+          <li id="list" type="1" key={index}>{item}&ensp;
+          <input id="checkBox" type="checkbox"/>
+          <img id="cross" onClick={()=>this.removeItemhandler(index)} src={cross}/></li>
+        ))}</div> 
     </div>
   );
 }
+}
+
+const TaskList = (props) => {
+
+return(
+  <div className="input">
+    <input id="textBox" type="text" onChange={props.inputHandler} />
+    <button id="button" onClick={props.buttonHandler}>Add</button>
+  </div>
+)};
 
 export default App;
